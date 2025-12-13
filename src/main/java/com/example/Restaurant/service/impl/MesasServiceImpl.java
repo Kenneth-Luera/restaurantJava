@@ -15,7 +15,7 @@ import com.example.Restaurant.entity.EstadoFacturacion;
 import com.example.Restaurant.entity.EstadoMesa;
 import com.example.Restaurant.entity.Mesas;
 import com.example.Restaurant.exceptions.ResourceNotFoundException;
-import com.example.Restaurant.repository.MesasRespository;
+import com.example.Restaurant.repository.MesasRepository;
 import com.example.Restaurant.mapper.MesasMapper;
 import com.example.Restaurant.service.MesasService;
 
@@ -23,7 +23,7 @@ import com.example.Restaurant.service.MesasService;
 public class MesasServiceImpl implements MesasService{
 
     @Autowired
-    private MesasRespository mesasRespository;
+    private MesasRepository mesasRespository;
 
     @Autowired
     private MesasMapper mesasMapper;

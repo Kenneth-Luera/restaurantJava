@@ -1,20 +1,16 @@
 package com.example.Restaurant.controller;
 
-
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-
+import com.example.Restaurant.service.MesasService;
 import com.example.Restaurant.dto.MesasDTO;
-
-import com.example.Restaurant.entity.EstadoMesa;
 import com.example.Restaurant.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,13 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-
-import com.example.Restaurant.service.MesasService;
-
 import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.validation.Valid;
-
 
 @RestController
 @RequestMapping("/api/mesas")
@@ -90,11 +82,11 @@ public class MesasController {
         }
     }
 
-    @GetMapping("/estado/{}")
-    public ResponseEntity<List<MesasDTO>> ListarMesasPorEstado(@PathVariable EstadoMesa estado) {
-        List<MesasDTO> mesasDTOs = mesasService.obtenerMesasPorEstado(estado);
-        return ResponseEntity.ok(mesasDTOs);
-    }
+    //@GetMapping("/estado/{estado}")
+    //public ResponseEntity<List<MesasDTO>> ListarMesasPorEstado(@PathVariable EstadoMesa estado) {
+    //    List<MesasDTO> mesasDTOs = mesasService.obtenerMesasPorEstado(estado);
+    //    return ResponseEntity.ok(mesasDTOs);
+    //}
 
 }
 

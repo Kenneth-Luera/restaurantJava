@@ -10,13 +10,16 @@ import org.springframework.stereotype.Repository;
 import com.example.Restaurant.entity.EstadoMesa;
 import com.example.Restaurant.entity.Mesas;
 
+
 @Repository
-public interface MesasRespository extends JpaRepository<Mesas,UUID>{
+public interface MesasRepository extends JpaRepository<Mesas,UUID>{
     
     Optional<Mesas> findByNumeroMesa(int numeroMesa);
 
     Optional<Mesas> findByIdMesas(UUID idMesas);
 
     List<Mesas> findByEstadoMesa(EstadoMesa estadoMesa);
+
+    //Optional<Mesas> findById(String idMesas);
 
 }

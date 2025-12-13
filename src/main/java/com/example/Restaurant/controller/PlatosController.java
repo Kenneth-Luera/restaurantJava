@@ -1,7 +1,12 @@
 package com.example.Restaurant.controller;
 
+import com.example.Restaurant.service.PlatosService;
+import com.example.Restaurant.dto.PlatosDTO;
+import com.example.Restaurant.exceptions.ResourceNotFoundException;
+
 import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.Restaurant.dto.PlatosDTO;
-import com.example.Restaurant.exceptions.ResourceNotFoundException;
-import com.example.Restaurant.service.PlatosService;
-
 import jakarta.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/platos")
@@ -31,6 +31,8 @@ public class PlatosController {
 
     @PostMapping("/registrar")
     public ResponseEntity<PlatosDTO> crearPlato(@Valid @RequestBody PlatosDTO platosDTO){
+        System.out.println("🔹 JSON recibido:");
+        System.out.println(platosDTO);
         PlatosDTO nuevoPlato = platosService.crearPlato(platosDTO);
         return new ResponseEntity<>(nuevoPlato, HttpStatus.CREATED);
     }

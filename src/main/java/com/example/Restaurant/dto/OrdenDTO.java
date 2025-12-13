@@ -4,8 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import com.example.Restaurant.entity.Mesas;
-import com.example.Restaurant.entity.Platos;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -19,13 +18,16 @@ import lombok.NoArgsConstructor;
 public class OrdenDTO {
     private UUID idOrden;
 
-    @NotNull(message = "es obligatorio seleccionar el numero de mesa")
-    private Mesas numeroMesa;
+    @NotNull(message = "La mesa es obligatoria")
+    @JsonProperty("idMesa")
+    private UUID idMesa;
 
     @NotNull(message = "esta seccion no puede estar vacio")
-    private List<Platos> platos; 
+    @JsonProperty("idPlatos")
+    private List<UUID> idPlatos;
 
     @NotNull(message = "precio total no puede estar vacio")
-    @Min(value = 0, message =  "el monto no puede ser negativo")
+    @JsonProperty("precioTotal")
+    @Min(value = 0, message = "el monto no puede ser negativo")
     private BigDecimal precioTotal;
 }

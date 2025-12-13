@@ -1,6 +1,10 @@
 package com.example.Restaurant.entity;
 
+import java.sql.Types;
 import java.util.UUID;
+
+import org.hibernate.annotations.JdbcTypeCode;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,8 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Platos {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_plato")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id_plato", length = 36)
+    @JdbcTypeCode(Types.CHAR)
     private UUID idPlato;
 
     @Column(name = "nombre_plato",nullable = false, length = 100)
@@ -31,5 +36,5 @@ public class Platos {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado",nullable = false)
-    private Estado estado;
+    private EstadoPlato estadoPlato;
 }

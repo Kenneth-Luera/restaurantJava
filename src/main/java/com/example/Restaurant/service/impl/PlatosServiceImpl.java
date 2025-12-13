@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.Restaurant.dto.PlatosDTO;
 import com.example.Restaurant.entity.Platos;
@@ -13,6 +14,7 @@ import com.example.Restaurant.mapper.PlatosMapper;
 import com.example.Restaurant.repository.PlatosRepository;
 import com.example.Restaurant.service.PlatosService;
 
+@Service
 public class PlatosServiceImpl implements PlatosService{
 
     @Autowired

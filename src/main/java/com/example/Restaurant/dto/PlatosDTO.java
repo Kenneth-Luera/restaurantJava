@@ -4,7 +4,7 @@ package com.example.Restaurant.dto;
 import java.util.UUID;
 
 import com.example.Restaurant.entity.Categoria;
-import com.example.Restaurant.entity.Estado;
+import com.example.Restaurant.entity.EstadoPlato;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -34,5 +34,5 @@ public class PlatosDTO {
     private Categoria categoria;
 
     @NotNull(message = "es obligatorio seleccionar el estado del plato")
-    private Estado estado;
+    private EstadoPlato estadoPlato;
 }

@@ -13,7 +13,11 @@ public interface OrdenService {
 
     Optional<OrdenDTO> obtenerOrdenPorId(UUID idOrden);
 
-    OrdenDTO actualizarOrden(UUID idOrden, OrdenDTO ordenDTO);
+    OrdenDTO obtenerOrden(UUID idOrden);
 
+    OrdenDTO actualizarOrden(UUID idOrden, OrdenDTO ordenDTO);
+    
     void eliminarOrden(UUID idOrden);
+
+    OrdenDTO agregarPlatosAOrden(UUID idOrden, List<UUID> idPlatos);
 }

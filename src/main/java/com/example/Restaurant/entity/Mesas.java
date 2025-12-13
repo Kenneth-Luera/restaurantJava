@@ -1,6 +1,10 @@
 package com.example.Restaurant.entity;
 
+import java.sql.Types;
 import java.util.UUID;
+
+import org.hibernate.annotations.JdbcTypeCode;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +18,8 @@ public class Mesas {
     
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_mesa")
+    @Column(name = "id_mesa", length = 36)
+    @JdbcTypeCode(Types.CHAR)
     private UUID idMesas;
 
     @Column(name = "numero_mesa", nullable = false)
@@ -28,7 +33,7 @@ public class Mesas {
     private EstadoFacturacion estadoFacturacion;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado_clienteMesa", nullable = false)
+    @Column(name = "estado_cliente_mesa", nullable = false)
     private EstadoClienteMesa estadoClienteMesa;
 
     @Enumerated(EnumType.STRING)

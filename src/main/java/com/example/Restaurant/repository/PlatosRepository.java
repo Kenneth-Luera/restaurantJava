@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.Restaurant.entity.Estado;
+import com.example.Restaurant.entity.EstadoPlato;
 import com.example.Restaurant.entity.Platos;
 
 @Repository
@@ -17,6 +17,6 @@ public interface PlatosRepository extends JpaRepository<Platos,UUID> {
 
     Optional<Platos> findByIdPlato(UUID idPlato);
 
-    List<Platos> findByEstadoPlato(Estado estado);
+    List<Platos> findByEstadoPlato(EstadoPlato estadoPlato);
 }
 
