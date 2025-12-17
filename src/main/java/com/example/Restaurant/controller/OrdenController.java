@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.Restaurant.dto.OrdenDTO;
 import com.example.Restaurant.service.OrdenService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/ordenes")
 public class OrdenController {
