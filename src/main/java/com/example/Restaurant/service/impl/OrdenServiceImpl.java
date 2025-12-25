@@ -89,21 +89,35 @@ public class OrdenServiceImpl implements OrdenService {
     @Override
     public OrdenDTO agregarPlatosAOrden(UUID idOrden, List<UUID> idPlatos) {
 
-        Orden orden = ordenRepository.findById(idOrden)
-                .orElseThrow(() -> new ResourceNotFoundException("Orden no encontrada"));
+    Orden orden = ordenRepository.findById(idOrden)
+            .orElseThrow(() -> new ResourceNotFoundException("Orden no encontrada"));
 
-        List<Platos> platos = platosRepository.findAllById(idPlatos);
+    List<Platos> platos = platosRepository.findAllById(idPlatos);
 
-        orden.getPlatos().addAll(platos);
-
-        BigDecimal total = orden.getPlatos().stream()
-                .map(p -> BigDecimal.valueOf(p.getPrecioPlato()))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        orden.setPrecioTotal(total);
-
-        Orden actualizado = ordenRepository.save(orden);
-
-        return ordenMapper.toDTO(actualizado);
+    if (platos.isEmpty()) {
+        throw new ResourceNotFoundException("No se encontraron los platos solicitados");
     }
+
+    boolean existePlatoSinStock = platos.stream()
+            .anyMatch(p -> p.getCantidadPlatos() == 0);
+
+    if (existePlatoSinStock) {
+        throw new IllegalArgumentException(
+                "No se puede agregar la orden: uno o más platos no tienen stock disponible"
+        );
+    }
+
+    orden.getPlatos().addAll(platos);
+
+    BigDecimal total = orden.getPlatos().stream()
+            .map(p -> BigDecimal.valueOf(p.getPrecioPlato()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    orden.setPrecioTotal(total);
+
+    Orden actualizado = ordenRepository.save(orden);
+
+    return ordenMapper.toDTO(actualizado);
+}
+
 }
