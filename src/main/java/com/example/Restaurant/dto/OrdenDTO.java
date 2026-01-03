@@ -16,18 +16,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrdenDTO {
+
     private UUID idOrden;
-
-    @NotNull(message = "La mesa es obligatoria")
-    @JsonProperty("idMesa")
     private UUID idMesa;
+    private int numeroMesa;
 
-    @NotNull(message = "esta seccion no puede estar vacio")
-    @JsonProperty("idPlatos")
-    private List<UUID> idPlatos;
+    private List<OrdenItemDTO> items;
 
-    @NotNull(message = "precio total no puede estar vacio")
-    @JsonProperty("precioTotal")
-    @Min(value = 0, message = "el monto no puede ser negativo")
     private BigDecimal precioTotal;
 }

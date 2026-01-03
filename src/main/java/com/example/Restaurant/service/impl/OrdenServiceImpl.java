@@ -11,14 +11,15 @@ import org.springframework.stereotype.Service;
 import com.example.Restaurant.dto.OrdenDTO;
 import com.example.Restaurant.entity.Mesas;
 import com.example.Restaurant.entity.Orden;
+import com.example.Restaurant.entity.OrdenPlato;
 import com.example.Restaurant.entity.Platos;
 import com.example.Restaurant.exceptions.ResourceNotFoundException;
 import com.example.Restaurant.mapper.OrdenMapper;
 import com.example.Restaurant.repository.MesasRepository;
 import com.example.Restaurant.repository.OrdenRepository;
+import com.example.Restaurant.repository.OrdenPlatoRepository;
 import com.example.Restaurant.repository.PlatosRepository;
 import com.example.Restaurant.service.OrdenService;
-
 @Service
 public class OrdenServiceImpl implements OrdenService {
 
@@ -32,6 +33,9 @@ public class OrdenServiceImpl implements OrdenService {
     private PlatosRepository platosRepository;
 
     @Autowired
+    private OrdenPlatoRepository ordenPlatoRepository;
+
+    @Autowired
     private OrdenMapper ordenMapper;
 
     @Override
@@ -42,21 +46,19 @@ public class OrdenServiceImpl implements OrdenService {
 
         Orden orden = new Orden();
         orden.setMesa(mesa);
-
         orden.setPrecioTotal(BigDecimal.ZERO);
 
-        Orden nuevaOrden = ordenRepository.save(orden);
-        return ordenMapper.toDTO(nuevaOrden);
+        Orden guardada = ordenRepository.save(orden);
+
+        return ordenMapper.toDTO(guardada);
     }
 
     @Override
     public List<OrdenDTO> ListarOrden() {
-        return ordenRepository.findAll().stream().map(ordenMapper::toDTO).toList();
-    }
-
-    @Override
-    public Optional<OrdenDTO> obtenerOrdenPorId(UUID idOrden) {
-        return ordenRepository.findById(idOrden).map(ordenMapper::toDTO);
+        return ordenRepository.findAll()
+                .stream()
+                .map(ordenMapper::toDTO)
+                .toList();
     }
 
     @Override
@@ -68,8 +70,68 @@ public class OrdenServiceImpl implements OrdenService {
     }
 
     @Override
-    public OrdenDTO actualizarOrden(UUID idOrden, OrdenDTO ordenDTO) {
+    public OrdenDTO agregarPlatosAOrden(UUID idOrden, List<UUID> idPlatos) {
 
+        Orden orden = ordenRepository.findById(idOrden)
+                .orElseThrow(() -> new ResourceNotFoundException("Orden no encontrada"));
+
+        BigDecimal total = orden.getPrecioTotal();
+
+        for (UUID idPlato : idPlatos) {
+
+            Platos plato = platosRepository.findById(idPlato)
+                    .orElseThrow(() -> new ResourceNotFoundException("Plato no encontrado"));
+
+            if (plato.getCantidadPlatos() <= 0) {
+                throw new IllegalArgumentException(
+                        "Plato sin stock: " + plato.getNombrePlato()
+                );
+            }
+
+            OrdenPlato item = ordenPlatoRepository
+                    .findByOrdenAndPlato(orden, plato)
+                    .orElse(null);
+
+            if (item != null) {
+                item.setCantidad(item.getCantidad() + 1);
+                item.setSubtotal(
+                        item.getPrecioUnitario()
+                                .multiply(BigDecimal.valueOf(item.getCantidad()))
+                );
+            } else {
+                item = new OrdenPlato();
+                item.setOrden(orden);
+                item.setPlato(plato);
+                item.setCantidad(1);
+                item.setPrecioUnitario(
+                        BigDecimal.valueOf(plato.getPrecioPlato())
+                );
+                item.setSubtotal(item.getPrecioUnitario());
+                orden.getItems().add(item);
+            }
+
+            plato.setCantidadPlatos(plato.getCantidadPlatos() - 1);
+            platosRepository.save(plato);
+
+            total = total.add(item.getPrecioUnitario());
+        }
+
+        orden.setPrecioTotal(total);
+
+        Orden guardada = ordenRepository.save(orden);
+
+        return ordenMapper.toDTO(guardada);
+    }
+    @Override
+    public OrdenDTO obtenerOrdenPorId(UUID idOrden) {
+        Orden orden = ordenRepository.findById(idOrden)
+                .orElseThrow(() -> new ResourceNotFoundException("Orden no encontrada"));
+
+        return ordenMapper.toDTO(orden);
+    }
+
+    @Override
+    public OrdenDTO actualizarOrden(UUID idOrden, OrdenDTO ordenDTO) {
         Orden orden = ordenRepository.findById(idOrden)
                 .orElseThrow(() -> new ResourceNotFoundException("Orden no encontrada"));
 
@@ -81,43 +143,16 @@ public class OrdenServiceImpl implements OrdenService {
 
     @Override
     public void eliminarOrden(UUID idOrden) {
+
         Orden orden = ordenRepository.findById(idOrden)
                 .orElseThrow(() -> new ResourceNotFoundException("Orden no encontrada"));
+
         ordenRepository.delete(orden);
     }
 
     @Override
-    public OrdenDTO agregarPlatosAOrden(UUID idOrden, List<UUID> idPlatos) {
-
-    Orden orden = ordenRepository.findById(idOrden)
-            .orElseThrow(() -> new ResourceNotFoundException("Orden no encontrada"));
-
-    List<Platos> platos = platosRepository.findAllById(idPlatos);
-
-    if (platos.isEmpty()) {
-        throw new ResourceNotFoundException("No se encontraron los platos solicitados");
+    public List<OrdenDTO> listarOrdenes() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'listarOrdenes'");
     }
-
-    boolean existePlatoSinStock = platos.stream()
-            .anyMatch(p -> p.getCantidadPlatos() == 0);
-
-    if (existePlatoSinStock) {
-        throw new IllegalArgumentException(
-                "No se puede agregar la orden: uno o más platos no tienen stock disponible"
-        );
-    }
-
-    orden.getPlatos().addAll(platos);
-
-    BigDecimal total = orden.getPlatos().stream()
-            .map(p -> BigDecimal.valueOf(p.getPrecioPlato()))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-    orden.setPrecioTotal(total);
-
-    Orden actualizado = ordenRepository.save(orden);
-
-    return ordenMapper.toDTO(actualizado);
-}
-
 }

@@ -1,48 +1,53 @@
 package com.example.Restaurant.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.modelmapper.ModelMapper;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 import com.example.Restaurant.dto.OrdenDTO;
+import com.example.Restaurant.dto.OrdenItemDTO;
 import com.example.Restaurant.entity.Orden;
-import com.example.Restaurant.entity.Platos;
+import com.example.Restaurant.entity.OrdenPlato;
 
 @Component
 public class OrdenMapper {
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     public OrdenDTO toDTO(Orden orden) {
-        OrdenDTO dto = modelMapper.map(orden, OrdenDTO.class);
+
+        OrdenDTO dto = new OrdenDTO();
+        dto.setIdOrden(orden.getIdOrden());
 
         dto.setIdMesa(orden.getMesa().getIdMesas());
-
-        dto.setIdPlatos(
-            orden.getPlatos()
-                .stream()
-                .map(Platos::getIdPlato)
-                .toList()
-        );
+        dto.setNumeroMesa(orden.getMesa().getNumeroMesa());
 
         dto.setPrecioTotal(
             orden.getPrecioTotal() == null
-                ? java.math.BigDecimal.ZERO
+                ? BigDecimal.ZERO
                 : orden.getPrecioTotal()
         );
+
+        List<OrdenItemDTO> items = orden.getItems()
+            .stream()
+            .map(this::toItemDTO)
+            .toList();
+
+        dto.setItems(items);
 
         return dto;
     }
 
-    public Orden toEntity(OrdenDTO dto) {
-        Orden orden = modelMapper.map(dto, Orden.class);
+    private OrdenItemDTO toItemDTO(OrdenPlato item) {
 
-        orden.setMesa(null);
-        orden.setPlatos(null);
+        OrdenItemDTO dto = new OrdenItemDTO();
 
-        orden.setPrecioTotal(dto.getPrecioTotal());
+        dto.setIdPlato(item.getPlato().getIdPlato());
+        dto.setNombrePlato(item.getPlato().getNombrePlato());
+        dto.setCantidad(item.getCantidad());
+        dto.setPrecioUnitario(item.getPrecioUnitario());
+        dto.setSubtotal(item.getSubtotal());
 
-        return orden;
+        return dto;
     }
 }
+

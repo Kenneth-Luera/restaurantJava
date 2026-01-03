@@ -8,21 +8,30 @@ import java.util.UUID;
 
 import org.hibernate.annotations.JdbcTypeCode;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name = "orden")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Orden {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_orden")
+    @Column(name = "id_orden", length = 36)
     @JdbcTypeCode(Types.CHAR)
     private UUID idOrden;
 
@@ -30,19 +39,9 @@ public class Orden {
     @JoinColumn(name = "id_mesa", nullable = false)
     private Mesas mesa;
 
-    @ManyToMany
-    @JoinTable(
-        name = "orden_platos",
-        joinColumns = @JoinColumn(name = "id_orden"),
-        inverseJoinColumns = @JoinColumn(name = "id_plato")
-    )
-    private List<Platos> platos = new ArrayList<>();
-
     @Column(name = "precio_total", nullable = false)
     private BigDecimal precioTotal = BigDecimal.ZERO;
 
-    public void setPrecioTotal(BigDecimal precio) {
-        this.precioTotal = precio == null ? BigDecimal.ZERO : precio;
-    }
-
+    @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrdenPlato> items = new ArrayList<>();
 }
