@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Mesas {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_mesa", length = 36)
@@ -25,19 +25,21 @@ public class Mesas {
     @Column(name = "numero_mesa", nullable = false)
     private int numeroMesa;
 
-    @Column(name = "numero_asientos", nullable =  false)
+    @Column(name = "numero_asientos", nullable = false)
     private int numeroAsientos;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado_facturacion", nullable = false)
+    @JdbcTypeCode(Types.VARCHAR) 
+    @Column(name = "estado_facturacion", nullable = false, length = 30)
     private EstadoFacturacion estadoFacturacion;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado_cliente_mesa", nullable = false)
+    @JdbcTypeCode(Types.VARCHAR)
+    @Column(name = "estado_cliente_mesa", nullable = false, length = 30)
     private EstadoClienteMesa estadoClienteMesa;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado_mesa",nullable = false)
+    @JdbcTypeCode(Types.VARCHAR)
+    @Column(name = "estado_mesa", nullable = false, length = 30)
     private EstadoMesa estadoMesa;
-
 }

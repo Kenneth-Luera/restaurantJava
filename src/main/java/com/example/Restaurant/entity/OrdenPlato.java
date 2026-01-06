@@ -3,6 +3,8 @@ package com.example.Restaurant.entity;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +23,7 @@ public class OrdenPlato {
 
     @ManyToOne
     @JoinColumn(name = "id_orden", nullable = false)
+    @JsonBackReference
     private Orden orden;
 
     @ManyToOne
