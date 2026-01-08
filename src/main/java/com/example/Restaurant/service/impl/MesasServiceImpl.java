@@ -58,11 +58,17 @@ public class MesasServiceImpl implements MesasService{
 
     @Override
     public MesasDTO actualizarMesa(UUID idMesa, MesasDTO mesasDTO) {
-        Mesas mesaExistente = mesasRespository.findByIdMesas(idMesa)
-            .orElseThrow(() -> new ResourceNotFoundException("mesa no encontrada"));
-
-        mesaExistente.setNumeroMesa(mesasDTO.getNumeroMesa());
-        Mesas mesaActualizada = mesasRespository.save(mesaExistente);
+        Optional<Mesas> mesasExistentes = mesasRespository.findByIdMesas(idMesa);
+        if(!mesasExistentes.isPresent()){
+            throw new ResourceNotFoundException( "mesa no encontrada");
+        }
+        Mesas mesaActualizar = mesasExistentes.get();
+        mesaActualizar.setNumeroMesa(mesasDTO.getNumeroMesa());
+        mesaActualizar.setNumeroAsientos(mesasDTO.getNumeroAsientos());
+        mesaActualizar.setEstadoMesa(mesasDTO.getEstadoMesa());
+        mesaActualizar.setEstadoClienteMesa(mesasDTO.getEstadoClienteMesa());
+        
+        Mesas mesaActualizada = mesasRespository.save(mesaActualizar);
         return mesasMapper.toDTO(mesaActualizada);
     }
 
@@ -84,9 +90,13 @@ public class MesasServiceImpl implements MesasService{
     }
 
     @Override
-    public MesasDTO cambiarEstadoClienteMesa(UUID idMesa, EstadoClienteMesa nuevoEstado) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'cambiarEstadoClienteMesa'");
+    public MesasDTO cambiarEstadoMesa(UUID idMesa, EstadoMesa nuevoEstado) {
+        Mesas mesa = mesasRespository.findByIdMesas(idMesa)
+                .orElseThrow(() -> new ResourceNotFoundException("Mesa no encontrada"));
+
+        mesa.setEstadoMesa(nuevoEstado);
+        Mesas mesaActualizada = mesasRespository.save(mesa);
+        return mesasMapper.toDTO(mesaActualizada);
     }
 
     @Override

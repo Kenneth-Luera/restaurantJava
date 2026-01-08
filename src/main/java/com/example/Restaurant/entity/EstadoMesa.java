@@ -1,11 +1,10 @@
 package com.example.Restaurant.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum EstadoMesa {
-    DISPONIBLE, NO_DISPONIBLE;
+    DISPONIBLE,
+    PAGADO,
+    NO_DISPONIBLE;
 
-    @JsonCreator
-    public static EstadoMesa fromString(String value) {
-        return EstadoMesa.valueOf(value.toUpperCase());
-    }
 }

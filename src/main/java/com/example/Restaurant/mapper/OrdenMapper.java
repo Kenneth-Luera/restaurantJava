@@ -20,7 +20,7 @@ public class OrdenMapper {
 
         dto.setIdMesa(orden.getMesa().getIdMesas());
         dto.setNumeroMesa(orden.getMesa().getNumeroMesa());
-
+        dto.setEstadoFacturacion(orden.getEstadoFacturacion());
         dto.setPrecioTotal(
             orden.getPrecioTotal() == null
                 ? BigDecimal.ZERO

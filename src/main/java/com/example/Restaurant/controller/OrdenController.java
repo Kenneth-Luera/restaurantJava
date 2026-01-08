@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.Restaurant.dto.OrdenDTO;
+import com.example.Restaurant.dto.OrdenItemDTO;
 import com.example.Restaurant.service.OrdenService;
 
 @CrossOrigin(origins = "*")
@@ -26,13 +27,36 @@ public class OrdenController {
         return new ResponseEntity<>(ordenService.crearOrden(ordenDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping("/{idOrden}/agregar-platos")
-    public ResponseEntity<?> agregarPlatos(@PathVariable UUID idOrden,@RequestBody List<UUID> idPlatos) {
-        System.out.println("🔹 JSON recibido para agregar platos a la orden " + idOrden + ":");
-        System.out.println(idPlatos);
-        
-        return new ResponseEntity<>(ordenService.agregarPlatosAOrden(idOrden, idPlatos), HttpStatus.OK);
+    @GetMapping("/ultima/mesa/{idMesa}")
+    public ResponseEntity<OrdenDTO> obtenerUltimaOrdenPorMesa(
+            @PathVariable UUID idMesa
+    ) {
+        return ResponseEntity.ok(
+                ordenService.obtenerUltimaOrdenPorMesa(idMesa)
+        );
     }
+
+
+    @PostMapping("/{idOrden}/platos")
+    public ResponseEntity<OrdenDTO> agregarPlatos(
+            @PathVariable UUID idOrden,
+            @RequestBody List<OrdenItemDTO> items
+    ) {
+        return ResponseEntity.ok(
+            ordenService.agregarPlatosAOrden(idOrden, items)
+        );
+    }
+
+    @PutMapping("/{idOrden}")
+    public ResponseEntity<OrdenDTO> actualizarOrden(@PathVariable UUID idOrden, @RequestBody OrdenDTO ordenDTO) {
+        try {
+            OrdenDTO ordenActualizada = ordenService.actualizarOrden(idOrden, ordenDTO);
+            return new ResponseEntity<>(ordenActualizada, HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @GetMapping("/{idOrden}")
     public ResponseEntity<?> obtenerOrden(@PathVariable UUID idOrden) {

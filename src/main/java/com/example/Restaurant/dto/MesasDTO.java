@@ -1,7 +1,6 @@
 package com.example.Restaurant.dto;
 
 import com.example.Restaurant.entity.EstadoClienteMesa;
-import com.example.Restaurant.entity.EstadoFacturacion;
 import com.example.Restaurant.entity.EstadoMesa;
 
 import jakarta.validation.constraints.Max;
@@ -28,9 +27,6 @@ public class MesasDTO {
     @Max(value = 25, message = "capidad maxima de asientos por mesa es 25")
     @Min(value = 0, message = "el numero debe ser mayor o igual a 0")
     private int numeroAsientos;
-
-    @NotNull(message = "El estado de la mesa es obligatorio")
-    private EstadoFacturacion estadoFacturacion;
 
     @NotNull(message = "El estado de la mesa es obligatorio")
     private EstadoClienteMesa estadoClienteMesa;

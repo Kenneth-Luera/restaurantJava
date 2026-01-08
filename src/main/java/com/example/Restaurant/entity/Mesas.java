@@ -29,11 +29,6 @@ public class Mesas {
     private int numeroAsientos;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(Types.VARCHAR) 
-    @Column(name = "estado_facturacion", nullable = false, length = 30)
-    private EstadoFacturacion estadoFacturacion;
-
-    @Enumerated(EnumType.STRING)
     @JdbcTypeCode(Types.VARCHAR)
     @Column(name = "estado_cliente_mesa", nullable = false, length = 30)
     private EstadoClienteMesa estadoClienteMesa;

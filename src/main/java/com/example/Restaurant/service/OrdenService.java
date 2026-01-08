@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.Restaurant.dto.OrdenDTO;
+import com.example.Restaurant.dto.OrdenItemDTO;
 
 public interface OrdenService {
 
@@ -17,9 +18,11 @@ public interface OrdenService {
 
     void eliminarOrden(UUID idOrden);
 
-    OrdenDTO agregarPlatosAOrden(UUID idOrden, List<UUID> idPlatos);
-
     OrdenDTO obtenerOrden(UUID idOrden);
 
     List<OrdenDTO> ListarOrden();
+
+    OrdenDTO agregarPlatosAOrden(UUID idOrden, List<OrdenItemDTO> items);
+
+    OrdenDTO obtenerUltimaOrdenPorMesa(UUID idMesa);
 }

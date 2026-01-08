@@ -2,6 +2,7 @@ package com.example.Restaurant.controller;
 
 import com.example.Restaurant.service.MesasService;
 import com.example.Restaurant.dto.MesasDTO;
+import com.example.Restaurant.entity.EstadoMesa;
 import com.example.Restaurant.exceptions.ResourceNotFoundException;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;

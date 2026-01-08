@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,6 +42,11 @@ public class Orden {
     @ManyToOne
     @JoinColumn(name = "id_mesa", nullable = false)
     private Mesas mesa;
+
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(Types.VARCHAR) 
+    @Column(name = "estado_facturacion", nullable = false, length = 30)
+    private EstadoFacturacion estadoFacturacion;
 
     @Column(name = "precio_total", nullable = false)
     private BigDecimal precioTotal = BigDecimal.ZERO;

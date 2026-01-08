@@ -24,7 +24,7 @@ public interface MesasService {
 
     void eliminarMesa(UUID idMesa);
 
-    MesasDTO cambiarEstadoClienteMesa(UUID idMesa, EstadoClienteMesa nuevoEstado);
+    MesasDTO cambiarEstadoMesa(UUID idMesa, EstadoMesa nuevoEstado);
 
     List<MesasDTO> obtenerMesasPorEstado(EstadoMesa estadoMesa);
 
@@ -35,5 +35,6 @@ public interface MesasService {
     List<MesasDTO> obtenerMesasDisponibles();
 
     boolean existePorNumeroMesa(int numeroMesa);
+
 
 }

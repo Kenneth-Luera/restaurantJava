@@ -4,10 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.example.Restaurant.entity.EstadoFacturacion;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,8 +18,8 @@ public class OrdenDTO {
     private UUID idOrden;
     private UUID idMesa;
     private int numeroMesa;
-
+    private EstadoFacturacion estadoFacturacion;
     private List<OrdenItemDTO> items;
-
     private BigDecimal precioTotal;
+
 }
